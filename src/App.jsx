@@ -1,10 +1,15 @@
-import React from 'react';
+import { useRef, useState } from 'react';
 import audioFile from './assets/marimba-ringtone-10-201160.mp3';
 import './App.css';
 
 function App() {
 
-  const audioRef = React.useRef(null);
+  const [breakLength, setBreakLength] = useState(5);
+  const [workLength, setWorkLength] = useState(25);
+  const [timerState, setTimerState] = useState('stopped');
+  const [timerType, setTimerType] = useState('Work');
+  const [timer, setTimer] = useState(1500);
+  const audioRef = useRef(null);
 
   const playAudio = () => {
 		if (audioRef.current) {
@@ -32,7 +37,7 @@ function App() {
 								className='timer-length'
 								id='break-length'
 							>
-								5
+								{breakLength}
 							</div>
 							<button
 								id='break-increment'
@@ -55,7 +60,7 @@ function App() {
 								className='timer-length'
 								id='work-length'
 							>
-								25
+								{workLength}
 							</div>
 							<button
 								id='work-increment'
