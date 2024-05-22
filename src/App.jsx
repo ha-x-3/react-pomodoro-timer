@@ -90,12 +90,16 @@ const App = () => {
 
 	const switchToBreak = () => {
 		setTimerType('Break');
-		setTimer(breakLength * 60);
+		if (breakLength > 0) {
+			setTimer(breakLength * 60);
+		}
 	};
 
 	const switchToWork = () => {
 		setTimerType('Session');
-		setTimer(workLength * 60);
+		if (workLength > 0) {
+			setTimer(workLength * 60);
+		}
 	};
 
 	const decrementTimer = () => {
@@ -127,6 +131,7 @@ const App = () => {
 		setWorkLength(25);
 		setTimerType('Session');
 		setTimer(1500); // Reset timer to 25 minutes
+		playAudio(); // Stop the audio
 		if (audioRef.current) {
 			audioRef.current.pause();
 			audioRef.current.currentTime = 0;
@@ -152,6 +157,9 @@ const App = () => {
 	};
 
 	const formatTime = () => {
+		if (timer === 0 || timer < 0) {
+			return '00:00';
+		}
 		const minutes = Math.floor(timer / 60);
 		const seconds = timer % 60;
 		return `${minutes < 10 ? '0' : ''}${minutes}:${
