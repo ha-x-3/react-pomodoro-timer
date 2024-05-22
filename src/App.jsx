@@ -2,13 +2,28 @@ import React, { useState, useRef, useEffect } from 'react';
 import audioFile from './assets/marimba-ringtone-10-201160.mp3';
 import './App.css';
 
-const TimerLengthControl = ({ title, length, onDecrease, onIncrease }) => (
+const TimerLengthControl = ({ title, length, onDecrease, onIncrease, id }) => (
 	<div className='length-control'>
-		<h2>{title}</h2>
+		<h2 id={`${id}-label`}>{title}</h2>
 		<div className='control-div'>
-			<button onClick={onDecrease}>-</button>
-			<div className='timer-length'>{length}</div>
-			<button onClick={onIncrease}>+</button>
+			<button
+				id={`${id}-decrement`}
+				onClick={onDecrease}
+			>
+				-
+			</button>
+			<div
+				id={`${id}-length`}
+				className='timer-length'
+			>
+				{length}
+			</div>
+			<button
+				id={`${id}-increment`}
+				onClick={onIncrease}
+			>
+				+
+			</button>
 		</div>
 	</div>
 );
@@ -22,14 +37,24 @@ const TimerDisplay = ({ timerType, timeLeft }) => (
 
 const TimerControls = ({ onStartStop, onReset }) => (
 	<div className='timer-controls'>
-		<button onClick={onStartStop}>START/STOP</button>
-		<button onClick={onReset}>RESET</button>
+		<button
+			id='start_stop'
+			onClick={onStartStop}
+		>
+			START/STOP
+		</button>
+		<button
+			id='reset'
+			onClick={onReset}
+		>
+			RESET
+		</button>
 	</div>
 );
 
 const Alarm = ({ audioRef }) => (
 	<audio
-		id='alarm'
+		id='beep'
 		preload='auto'
 		src={audioFile}
 		ref={audioRef}
@@ -40,7 +65,7 @@ const App = () => {
 	const [breakLength, setBreakLength] = useState(5);
 	const [workLength, setWorkLength] = useState(25);
 	const [timerState, setTimerState] = useState('stopped');
-	const [timerType, setTimerType] = useState('Work');
+	const [timerType, setTimerType] = useState('Session');
 	const [timer, setTimer] = useState(1500); // 25 minutes in seconds
 	const [intervalId, setIntervalId] = useState(null);
 	const [audioIntervalId, setAudioIntervalId] = useState(null);
@@ -79,7 +104,7 @@ const App = () => {
 	};
 
 	const switchToWork = () => {
-		setTimerType('Work');
+		setTimerType('Session');
 		setTimer(workLength * 60);
 	};
 
@@ -91,7 +116,7 @@ const App = () => {
 		if (timerState === 'stopped') {
 			if (timer === 0) {
 				stopAudioInterval();
-				if (timerType === 'Work') {
+				if (timerType === 'Session') {
 					switchToBreak();
 				} else {
 					switchToWork();
@@ -112,7 +137,7 @@ const App = () => {
 		stopAudioInterval();
 		setBreakLength(5);
 		setWorkLength(25);
-		setTimerType('Work');
+		setTimerType('Session');
 		setTimer(1500);
 		if (audioRef.current) {
 			audioRef.current.pause();
@@ -122,7 +147,7 @@ const App = () => {
 
 	const updateWorkLength = (newLength) => {
 		setWorkLength(newLength);
-		if (timerState === 'stopped' && timerType === 'Work') {
+		if (timerState === 'stopped' && timerType === 'Session') {
 			setTimer(newLength * 60);
 		}
 	};
@@ -157,9 +182,10 @@ const App = () => {
 					onIncrease={() =>
 						updateBreakLength(Math.min(60, breakLength + 1))
 					}
+					id='break'
 				/>
 				<TimerLengthControl
-					title='Work Length'
+					title='Session Length'
 					length={workLength}
 					onDecrease={() =>
 						updateWorkLength(Math.max(1, workLength - 1))
@@ -167,6 +193,7 @@ const App = () => {
 					onIncrease={() =>
 						updateWorkLength(Math.min(60, workLength + 1))
 					}
+					id='session'
 				/>
 			</div>
 			<TimerDisplay
