@@ -68,23 +68,33 @@ const App = () => {
 	const [timerType, setTimerType] = useState('Work');
 	const [timer, setTimer] = useState(1500); // 25 minutes in seconds
 	const [intervalId, setIntervalId] = useState(null);
+	const [audioIntervalId, setAudioIntervalId] = useState(null);
 	const audioRef = useRef(null);
 
 	useEffect(() => {
 		if (timer === 0) {
 			playAudio();
-			if (timerType === 'Work') {
-				setTimeout(switchToBreak, 1000); // Ensure display shows 00:00 before switching
-			} else {
-				setTimeout(switchToWork, 1000); // Ensure display shows 00:00 before switching
-			}
+			clearInterval(intervalId);
+			setTimerState('stopped');
+			startAudioInterval();
 		}
 	}, [timer]);
 
 	const playAudio = () => {
 		if (audioRef.current) {
-			audioRef.current.currentTime = 0; // Reset audio to start
 			audioRef.current.play();
+		}
+	};
+
+	const startAudioInterval = () => {
+		const id = setInterval(playAudio, 1000);
+		setAudioIntervalId(id);
+	};
+
+	const stopAudioInterval = () => {
+		if (audioIntervalId) {
+			clearInterval(audioIntervalId);
+			setAudioIntervalId(null);
 		}
 	};
 
@@ -109,6 +119,7 @@ const App = () => {
 	const startStopTimer = () => {
 		if (timerState === 'stopped') {
 			if (timer === 0) {
+				stopAudioInterval();
 				if (timerType === 'Work') {
 					switchToBreak();
 				} else {
@@ -127,11 +138,11 @@ const App = () => {
 	const resetTimer = () => {
 		setTimerState('stopped');
 		clearInterval(intervalId);
+		stopAudioInterval();
 		setBreakLength(5);
 		setWorkLength(25);
 		setTimerType('Work');
-		setTimer(1500); // Reset timer to 25 minutes
-		playAudio(); // Stop the audio
+		setTimer(1500);
 		if (audioRef.current) {
 			audioRef.current.pause();
 			audioRef.current.currentTime = 0;
