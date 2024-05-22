@@ -183,7 +183,8 @@ const App = () => {
 			<div className='main-title'>
 				<h1>Pomodoro Timer</h1>
 			</div>
-			<div id='timers-div'>
+			<div id='main-timer-div'>
+				<div id='timers-div'>
 				<TimerLengthControl
 					title='Break Length'
 					length={breakLength}
@@ -207,6 +208,7 @@ const App = () => {
 				onStartStop={startStopTimer}
 				onReset={resetTimer}
 			/>
+			</div>
 			<Alarm audioRef={audioRef} />
 			<small>
 				Sound Effect by{' '}

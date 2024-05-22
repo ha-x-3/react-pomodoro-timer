@@ -3,8 +3,16 @@
   text-align: center;
 }
 
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 h1 {
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
   font-size: 4em;
 }
 
@@ -13,8 +21,14 @@ button {
   background-color: rgb(48, 118, 87);
   border: 2px solid rgba(35, 47, 67, 0.5);
   border-radius: 4px;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
   padding: 5px 15px;
+}
+
+small {
+  align-self: center;
+  justify-self: flex-end;
+  margin-top: auto;
 }
 
 .control-div {
@@ -22,6 +36,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 15px;
+  margin: 20px auto;
 }
 
 .timer-length {
@@ -29,21 +44,30 @@ button {
 }
 
 .timer {
-  width: 50%;
-  margin: 50px auto 25px auto;
+  width: 75%;
+  height: 25%;
+  margin: 50px auto;
   padding: 20px;
-  border: 2px solid rgba(35, 47, 67, 0.8);
+  border: 2px solid rgba(35, 47, 67, 0.4);
   border-radius: 6px;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 4px rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .timer-controls {
   width: 75%;
-  margin: auto;
+  margin: 30px auto;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 45px;
+}
+
+#main-timer-div {
+  margin: auto;
 }
 
 #timers-div {
@@ -53,6 +77,8 @@ button {
 }
 
 #timer-label, #time-left {
-  font-size: 2em;
+  font-size: 4em;
   font-weight: bold;
+  text-shadow: 1px 1px 8px rgba(255, 255, 255, 0.8);
+  font-family: "Orbitron", sans-serif;
 }
