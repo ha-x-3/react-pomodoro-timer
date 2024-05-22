@@ -5,10 +5,16 @@
 
 .app {
   height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+a {
+  color: rgb(35, 47, 67);
+  text-decoration: none;
 }
 
 h1 {
@@ -29,6 +35,7 @@ small {
   align-self: center;
   justify-self: flex-end;
   margin-top: auto;
+  font-size: 0.5em;
 }
 
 .control-div {
@@ -45,9 +52,9 @@ small {
 
 .timer {
   width: 75%;
-  height: 25%;
-  margin: 50px auto;
-  padding: 20px;
+  height: 30%;
+  margin: 40px auto;
+  padding: 50px 0;
   border: 2px solid rgba(35, 47, 67, 0.4);
   border-radius: 6px;
   box-shadow: 1px 1px 4px rgba(255, 255, 255, 0.8);
@@ -58,16 +65,16 @@ small {
 }
 
 .timer-controls {
-  width: 75%;
-  margin: 30px auto;
+  width: 65%;
+  margin: 40px auto;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 45px;
+  justify-content: space-between;
 }
 
 #main-timer-div {
   margin: auto;
+  width: 60%;
 }
 
 #timers-div {
@@ -81,4 +88,42 @@ small {
   font-weight: bold;
   text-shadow: 1px 1px 8px rgba(255, 255, 255, 0.8);
   font-family: "Orbitron", sans-serif;
+}
+
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 2.5em;
+  }
+
+  button {
+    font-size: 1.2em;
+  }
+
+  .timer-length {
+    font-size: 1.2em;
+  }
+
+  .timer {
+    width: 90%;
+    padding: 20px 0;
+    margin: 20px auto;
+  }
+
+  .timer-controls {
+    width: 90%;
+    margin: 20px auto;
+  }
+
+  #main-timer-div {
+    width: 90%;
+  }
+
+  #timers-div {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #timer-label, #time-left {
+    font-size: 2em;
+  }
 }
