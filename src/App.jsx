@@ -65,7 +65,7 @@ const App = () => {
 	const [breakLength, setBreakLength] = useState(5);
 	const [workLength, setWorkLength] = useState(25);
 	const [timerState, setTimerState] = useState('stopped');
-	const [timerType, setTimerType] = useState('Session');
+	const [timerType, setTimerType] = useState('Work');
 	const [timer, setTimer] = useState(1500); // 25 minutes in seconds
 	const [intervalId, setIntervalId] = useState(null);
 	const audioRef = useRef(null);
@@ -73,7 +73,7 @@ const App = () => {
 	useEffect(() => {
 		if (timer === 0) {
 			playAudio();
-			if (timerType === 'Session') {
+			if (timerType === 'Work') {
 				setTimeout(switchToBreak, 1000); // Ensure display shows 00:00 before switching
 			} else {
 				setTimeout(switchToWork, 1000); // Ensure display shows 00:00 before switching
@@ -96,7 +96,7 @@ const App = () => {
 	};
 
 	const switchToWork = () => {
-		setTimerType('Session');
+		setTimerType('Work');
 		if (workLength > 0) {
 			setTimer(workLength * 60);
 		}
@@ -109,7 +109,7 @@ const App = () => {
 	const startStopTimer = () => {
 		if (timerState === 'stopped') {
 			if (timer === 0) {
-				if (timerType === 'Session') {
+				if (timerType === 'Work') {
 					switchToBreak();
 				} else {
 					switchToWork();
@@ -129,7 +129,7 @@ const App = () => {
 		clearInterval(intervalId);
 		setBreakLength(5);
 		setWorkLength(25);
-		setTimerType('Session');
+		setTimerType('Work');
 		setTimer(1500); // Reset timer to 25 minutes
 		playAudio(); // Stop the audio
 		if (audioRef.current) {
@@ -141,7 +141,7 @@ const App = () => {
 	const updateWorkLength = (newLength) => {
 		if (newLength > 0 && newLength <= 60) {
 			setWorkLength(newLength);
-			if (timerState === 'stopped' && timerType === 'Session') {
+			if (timerState === 'stopped' && timerType === 'Work') {
 				setTimer(newLength * 60);
 			}
 		}
@@ -181,7 +181,7 @@ const App = () => {
 					id='break'
 				/>
 				<TimerLengthControl
-					title='Session Length'
+					title='Work Length'
 					length={workLength}
 					onDecrease={() => updateWorkLength(workLength - 1)}
 					onIncrease={() => updateWorkLength(workLength + 1)}
