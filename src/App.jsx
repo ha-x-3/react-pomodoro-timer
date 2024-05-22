@@ -68,33 +68,23 @@ const App = () => {
 	const [timerType, setTimerType] = useState('Session');
 	const [timer, setTimer] = useState(1500); // 25 minutes in seconds
 	const [intervalId, setIntervalId] = useState(null);
-	const [audioIntervalId, setAudioIntervalId] = useState(null);
 	const audioRef = useRef(null);
 
 	useEffect(() => {
 		if (timer === 0) {
 			playAudio();
-			clearInterval(intervalId);
-			setTimerState('stopped');
-			startAudioInterval();
+			if (timerType === 'Session') {
+				setTimeout(switchToBreak, 1000); // Ensure display shows 00:00 before switching
+			} else {
+				setTimeout(switchToWork, 1000); // Ensure display shows 00:00 before switching
+			}
 		}
 	}, [timer]);
 
 	const playAudio = () => {
 		if (audioRef.current) {
+			audioRef.current.currentTime = 0; // Reset audio to start
 			audioRef.current.play();
-		}
-	};
-
-	const startAudioInterval = () => {
-		const id = setInterval(playAudio, 1000);
-		setAudioIntervalId(id);
-	};
-
-	const stopAudioInterval = () => {
-		if (audioIntervalId) {
-			clearInterval(audioIntervalId);
-			setAudioIntervalId(null);
 		}
 	};
 
@@ -115,7 +105,6 @@ const App = () => {
 	const startStopTimer = () => {
 		if (timerState === 'stopped') {
 			if (timer === 0) {
-				stopAudioInterval();
 				if (timerType === 'Session') {
 					switchToBreak();
 				} else {
@@ -134,11 +123,10 @@ const App = () => {
 	const resetTimer = () => {
 		setTimerState('stopped');
 		clearInterval(intervalId);
-		stopAudioInterval();
 		setBreakLength(5);
 		setWorkLength(25);
 		setTimerType('Session');
-		setTimer(1500);
+		setTimer(1500); // Reset timer to 25 minutes
 		if (audioRef.current) {
 			audioRef.current.pause();
 			audioRef.current.currentTime = 0;
@@ -146,16 +134,20 @@ const App = () => {
 	};
 
 	const updateWorkLength = (newLength) => {
-		setWorkLength(newLength);
-		if (timerState === 'stopped' && timerType === 'Session') {
-			setTimer(newLength * 60);
+		if (newLength > 0 && newLength <= 60) {
+			setWorkLength(newLength);
+			if (timerState === 'stopped' && timerType === 'Session') {
+				setTimer(newLength * 60);
+			}
 		}
 	};
 
 	const updateBreakLength = (newLength) => {
-		setBreakLength(newLength);
-		if (timerState === 'stopped' && timerType === 'Break') {
-			setTimer(newLength * 60);
+		if (newLength > 0 && newLength <= 60) {
+			setBreakLength(newLength);
+			if (timerState === 'stopped' && timerType === 'Break') {
+				setTimer(newLength * 60);
+			}
 		}
 	};
 
@@ -176,23 +168,15 @@ const App = () => {
 				<TimerLengthControl
 					title='Break Length'
 					length={breakLength}
-					onDecrease={() =>
-						updateBreakLength(Math.max(1, breakLength - 1))
-					}
-					onIncrease={() =>
-						updateBreakLength(Math.min(60, breakLength + 1))
-					}
+					onDecrease={() => updateBreakLength(breakLength - 1)}
+					onIncrease={() => updateBreakLength(breakLength + 1)}
 					id='break'
 				/>
 				<TimerLengthControl
 					title='Session Length'
 					length={workLength}
-					onDecrease={() =>
-						updateWorkLength(Math.max(1, workLength - 1))
-					}
-					onIncrease={() =>
-						updateWorkLength(Math.min(60, workLength + 1))
-					}
+					onDecrease={() => updateWorkLength(workLength - 1)}
+					onIncrease={() => updateWorkLength(workLength + 1)}
 					id='session'
 				/>
 			</div>
